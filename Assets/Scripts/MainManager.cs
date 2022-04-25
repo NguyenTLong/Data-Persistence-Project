@@ -11,12 +11,15 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
-    public GameObject GameOverText;
+    public GameObject GameOverUI;
+    public Text txtTopScore;
+    public Text txtYourScore;
     
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
+
 
     
     // Start is called before the first frame update
@@ -71,6 +74,21 @@ public class MainManager : MonoBehaviour
     public void GameOver()
     {
         m_GameOver = true;
-        GameOverText.SetActive(true);
+        GameOverUI.SetActive(true);
+
+        PlayerInfo playerInfo =  GameObject.Find("PlayerInfo").GetComponent<PlayerInfo>();
+        playerInfo.score = this.m_Points;
+
+        txtYourScore.text = "Your Score: " + m_Points;
+
+        if (playerInfo.saveData != null && playerInfo.saveData.playersInfo != null)
+        {
+            foreach (PlayerInfo.PlayerInfoData item in playerInfo.saveData.playersInfo)
+            {
+                Debug.Log(item.score);
+            }
+        }
+        
+        playerInfo.SavePlayerInfor();
     }
 }
